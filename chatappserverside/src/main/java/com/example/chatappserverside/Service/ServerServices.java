@@ -23,7 +23,7 @@ public class ServerServices {
     private PrintWriter out;
     private BufferedReader in;
     private String textMessage;
-    private Boolean isValid = false;
+    private boolean isValid = false;
     private ConfiqRead serverFile;
 
     @Autowired
@@ -73,16 +73,13 @@ public class ServerServices {
                 if ("exit".equalsIgnoreCase(textMessage)) {
                     System.out.println("Client exited");
                     break;
-                }else{
+                } else {
                     System.out.println("Session Response Message: " + textMessage);
                     validTextMessage(textMessage);
 
                 }
 
             }
-
-
-            
 
             if (serverFile.getValue("SERVER_CONF").contains("FALSE")) {
                 System.out.println("Where THE USER Is Exit !!");

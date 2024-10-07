@@ -47,7 +47,6 @@ public class ServerServices {
             String ClientPort = serverFile.getValue("CHAT_APP_PORT");
 
             InetAddress ip = InetAddress.getByName(ClientIp);
-          
 
             serverSocket = new ServerSocket(Integer.parseInt(ClientPort), 50, ip);
             while (!serverSocket.isClosed()) {
@@ -74,20 +73,20 @@ public class ServerServices {
                 if ("exit".equalsIgnoreCase(textMessage)) {
                     System.out.println("Client exited");
                     break;
+                }else{
+                    System.out.println("Session Response Message: " + textMessage);
+                    validTextMessage(textMessage);
+
                 }
-                System.out.println("Session Response Message: " + textMessage);
-                validTextMessage(textMessage);
-            }
-
-            if (isValid) {
-                String uniqueId = registrationInAllClientInServer("Register", "127.0.0.1");
-                out.println("You Are Successfully Registered In Server with Unique ID:" + "" + uniqueId);
 
             }
+
+
+            
 
             if (serverFile.getValue("SERVER_CONF").contains("FALSE")) {
-                stop(clientSocket);
                 System.out.println("Where THE USER Is Exit !!");
+                stop(clientSocket);
 
             }
 
@@ -123,8 +122,13 @@ public class ServerServices {
             this.isValid = false;
         } else {
             this.isValid = true;
+            if (this.isValid) {
+                String uniqueId = registrationInAllClientInServer("Register", "127.0.0.1");
+                out.println("You Are Successfully Registered In Server with Unique ID:" + "" + uniqueId);
+
+            }
         }
-       
+
     }
 
     // Registration in all clients in Server

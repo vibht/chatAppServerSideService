@@ -28,5 +28,8 @@ public class Constanat {
     public String SCALA_SERVER_API_BASE_URL;
     public String SCALA_CLIENT_APi_BASE_URL;
     public String SCALA_CHAT_API_BASE_URL;
+    public boolean MULTI_CLIENT_CONFIGURATION;
+    public boolean SERVER_STOP_CONF;
+
 
 }

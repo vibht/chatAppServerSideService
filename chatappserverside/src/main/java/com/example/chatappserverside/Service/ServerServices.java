@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.chatappserverside.Background.ConfiqRead;
-import com.example.chatappserverside.helper.Constanat;
 
 @Service
 public class ServerServices {
@@ -25,9 +24,6 @@ public class ServerServices {
     private String textMessage;
     private boolean isValid = false;
     private ConfiqRead serverFile;
-
-    @Autowired
-    private Constanat constant;
 
     public ServerServices(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -42,6 +38,7 @@ public class ServerServices {
     // Start the server connection
     public void serverStart() {
         try {
+
             String ClientIp = serverFile.getValue("CHAT_APP_HOST").replace("\"", "").trim();
 
             String ClientPort = serverFile.getValue("CHAT_APP_PORT");
@@ -49,12 +46,25 @@ public class ServerServices {
             InetAddress ip = InetAddress.getByName(ClientIp);
 
             serverSocket = new ServerSocket(Integer.parseInt(ClientPort), 50, ip);
-            while (!serverSocket.isClosed()) {
-                clientSocket = serverSocket.accept();
-                System.out.println("New Friend Connected");
 
-                Thread thread = new Thread(() -> sendMessage(clientSocket));
-                thread.start();
+            if (serverFile.getValue("MULTI_CLIENT_CONFIGURATION").contains("FALSE")) {
+                while (!serverSocket.isClosed()) {
+                    clientSocket = serverSocket.accept();
+                    System.out.println("New Single Friend Connected");
+
+                    Thread thread = new Thread(() -> sendMessage(clientSocket));
+                    thread.start();
+                }
+            } else {
+
+                // while (true) {
+                //     clientSocket = serverSocket.accept();
+                //     System.out.println("New Multiple Friend Connected");
+
+                //     Thread thread = new Thread(() -> sendMessage(clientSocket));
+                //     thread.start();
+                // }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +91,7 @@ public class ServerServices {
 
             }
 
-            if (serverFile.getValue("SERVER_CONF").contains("FALSE")) {
+            if (serverFile.getValue("SERVER_STOP_CONF").contains("FALSE")) {
                 System.out.println("Where THE USER Is Exit !!");
                 stop(clientSocket);
 
